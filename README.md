@@ -10,21 +10,29 @@
 
 После запуска сервера он ожидает подключения игроков и сигнализирует, если те подключились.
 
-![image](https://user-images.githubusercontent.com/62326372/140707337-26dc714f-a362-4173-a8b2-0acb55b01e72.png)
+![image](https://user-images.githubusercontent.com/62326372/141453050-37cdb751-56ca-43e3-aa34-9a241fb61b2d.png)
 
 После подключения сервер ожидает хода игроков, также реализована проверка на корректность ввода (на стороне сервера).
 
-![image](https://user-images.githubusercontent.com/62326372/140706629-82a74e71-7db1-4806-ba4b-635e86645ab6.png)
+![image](https://user-images.githubusercontent.com/62326372/141453074-6a154005-964e-4fe0-b261-2433e5425900.png)
 
 После корректного ввода обоих игроков сервер сообщает результаты игрокам.
 
-![image](https://user-images.githubusercontent.com/62326372/140706727-25dc822c-0410-4404-bc20-1c4b03e3fe23.png)
+![image](https://user-images.githubusercontent.com/62326372/141453092-031ac06e-9f0e-4e27-abf9-ea05c9f69b32.png)
 
 На сервере так же реализована проверка, если клиент отключился. Об этом он оповестит второго игрока.
 
-![image](https://user-images.githubusercontent.com/62326372/140706862-c535e815-e5df-4244-a70f-d177ba61ac5f.png)
+![image](https://user-images.githubusercontent.com/62326372/141453117-674b07c7-e383-45a6-ad60-5c7675fccd61.png)
 
 И если сервер по какой-то причине отключится, клиенты об этом узнают и выведут это на экран.
 
-![image](https://user-images.githubusercontent.com/62326372/140706961-a393fa25-9c54-4900-948d-8c55f3603d69.png)
+![image](https://user-images.githubusercontent.com/62326372/141453142-2f72a04e-a15f-426f-885b-8d03848e58ab.png)
+
+При попытке подключиться к серверу 3-му и последующим игрокам (а также при подключении игрока после отключения одного из уже начавших игру) будет выведено шуточное сообщение, которое означает, что сервер уже занят игрой.
+
+![image](https://user-images.githubusercontent.com/62326372/141453396-cc6aade5-ddbf-4cc2-99b8-73863f779248.png)
+
+При попытке начать игру при незапущенном сервере будет выведена следующая ошибка:
+
+![image](https://user-images.githubusercontent.com/62326372/141453487-9972e4c3-258f-4aef-a0a1-7eb491f81950.png)
 
