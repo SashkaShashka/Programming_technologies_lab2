@@ -1,15 +1,32 @@
 from socket import *
 import concurrent.futures
 import json
+import time
+import threading
+import sys
+
+class ThreadCloseSocket(threading.Thread):
+    def __init__(self, hostSocket):
+        super(ThreadCloseSocket, self).__init__()
+        self.hostSocket=hostSocket
+
+    def run(self):
+        while True:
+            clientSocket, clientAddress = self.hostSocket.accept()
+            clientSocket.send(json.dumps('С вами тут играть не хотят').encode("utf-8"))
+            clientSocket.close()
+               
+
 
 clients = list()
-
 
 def send_message(player, message):
     try:
         param_list[player][0].send(json.dumps(message).encode("utf-8"))
+        time.sleep(0.1)
     except Exception as e:
         print('Не получилось отправить сообщение игроку', player)
+        print(e)
 
 
 def clientThread(clientParams):
@@ -24,7 +41,7 @@ def clientThread(clientParams):
             else:
                 clientSocket.send(json.dumps('Ход ' + answer + ' не распознан. Введите один из вариантов: камень / ножницы / бумага').encode("utf-8"))
 
-    except (ConnectionAbortedError, ConnectionResetError):
+    except Exception as e:
         clients.remove(clientSocket)
         print(clientAddress[0] + ":" + str(clientAddress[1]) + " disconnected")
         answer = 'disconnected'
@@ -46,10 +63,14 @@ param_list = list()
 for i in range(2):
     clientSocket, clientAddress = hostSocket.accept()
     clients.append(clientSocket)
+    clientSocket.send(json.dumps('Ожидание другого игрока').encode("utf-8"))
     print("Connection established with: ", clientAddress[0] + ":" + str(clientAddress[1]))
 
     param_list.append((clientSocket, clientAddress))
 
+t1=ThreadCloseSocket(hostSocket)
+t1.daemon = True
+t1.start()
 with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = [executor.submit(clientThread, param) for param in param_list]
 
@@ -67,10 +88,12 @@ c = answers[1]
 
 if b == 'disconnected' and b != c:
     print('Один из игроков отключился, игра отменена')
-    send_message(1, '\nСоперник отключился, игра отменена')
+    send_message(1, '\nСоперник не сделал ход')
+    send_message(1, 'Соперник отключился, игра отменена')
 elif c == 'disconnected' and b != c:
     print('Один из игроков отключился, игра отменена')
-    send_message(0, '\nСоперник отключился, игра отменена')
+    send_message(0, '\nСоперник не сделал ход')
+    send_message(0, 'Соперник отключился, игра отменена')
 elif c == 'disconnected' and b == 'disconnected':
     print("Оба игрока отключились, игра отменена")
 else:
@@ -101,3 +124,4 @@ else:
             pass
 
 hostSocket.close()
+sys.exit()
